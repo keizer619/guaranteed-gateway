@@ -7,9 +7,9 @@ service backend on new http:Listener(9090) {
         path: "/store"
     }
     resource function store(http:Caller caller, http:Request req) {
-    var payload = req.getJsonPayload();
+    var payload = req.getTextPayload();
         http:Response res = new;
-        if (payload is json) {
+        if (payload is string) {
             log:printInfo(payload.toString());
         } 
 

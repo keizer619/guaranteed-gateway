@@ -9,9 +9,9 @@ service gateway on new http:Listener(9091) {
         path: "/hello"
     }
     resource function hello(http:Caller caller, http:Request req) {
-    var payload = req.getJsonPayload();
+    var payload = req.getTextPayload();
         http:Response res = new;
-        if (payload is json) {
+        if (payload is string) {
             string message = "";
             string subject = "demo";
 
@@ -19,7 +19,7 @@ service gateway on new http:Listener(9091) {
 
             nats:StreamingProducer publisher = new(conn);
 
-            var result = publisher->publish(subject, <@untainted> "hello");
+            var result = publisher->publish(subject, <@untainted> payload);
             if (result is nats:Error) {
                 error e = result;
                 log:printError("Error occurred while closing the connection", err = e);

@@ -12,24 +12,12 @@ listener nats:StreamingListener lis = new(conn);
 }
 service demoService on lis {
     resource function onMessage(nats:StreamingMessage message) {
-        http:Client clientEndpoint = new("http://localhost:9090/backend/store");
+        http:Client clientEndpoint = new("http://localhost:9090/backend");
         http:Request req = new;
 
         string extractedMessage = encoding:byteArrayToString(message.getData());
-        log:printInfo(extractedMessage);
-
-        json payload = { message: extractedMessage };
-        req.setPayload(payload);
-        var response = clientEndpoint->post("/post", req);
-        
-        if (response is http:Response) {
-            var msg = response.getJsonPayload();
-            if (msg is error){
-                log:printInfo(msg.toString());
-            } else {
-                log:printInfo(msg.toString());
-            } 
-        }
+        req.setPayload(extractedMessage);
+        var response = clientEndpoint->post("/store", req);
     }
 
     resource function onError(nats:StreamingMessage message, nats:Error errorVal) {
