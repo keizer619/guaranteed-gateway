@@ -1,4 +1,3 @@
-import ballerina/io;
 import ballerina/log;
 import ballerina/nats;
 import ballerina/http;

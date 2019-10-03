@@ -1,4 +1,3 @@
-import ballerina/log;
 import ballerina/http;
 
 public function main() {
